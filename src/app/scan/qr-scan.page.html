@@ -1,0 +1,110 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/client/pillars"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Scan QR Code</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="toggleFlashlight()">
+        <ion-icon [name]="flashlightOn ? 'flashlight' : 'flashlight-outline'"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="scan-container">
+  <!-- Scanning View -->
+  @if (!showPillarPreview && !scanResult) {
+    <div class="scan-area">
+      <div class="scan-overlay">
+        <div class="scan-frame">
+          <div class="scan-corner top-left"></div>
+          <div class="scan-corner top-right"></div>
+          <div class="scan-corner bottom-left"></div>
+          <div class="scan-corner bottom-right"></div>
+          <div class="scan-line"></div>
+        </div>
+      </div>
+
+      <div class="scan-instructions">
+        <ion-icon name="camera-outline" class="scan-icon"></ion-icon>
+        <h3>Scan Pillar QR Code</h3>
+        <p>Position the QR code inside the frame to start charging</p>
+        @if (!scanning) {
+          <ion-button expand="block" (click)="startScan()" class="scan-btn">
+            <ion-icon name="scan-outline" slot="start"></ion-icon>
+            Start Scanning
+          </ion-button>
+        } @else {
+          <div class="scanning-indicator">
+            <ion-spinner name="circular"></ion-spinner>
+            <p>Scanning...</p>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- Pillar Preview -->
+  @if (showPillarPreview && pillarDetails) {
+    <div class="pillar-preview">
+      <div class="preview-header">
+        <ion-icon name="checkmark-circle" color="success" size="large"></ion-icon>
+        <h2>Pillar Found!</h2>
+        <p>Confirm to start charging session</p>
+      </div>
+
+      <div class="pillar-card">
+        <div class="pillar-icon">
+          <ion-icon name="battery-charging"></ion-icon>
+        </div>
+        <div class="pillar-info">
+          <h3>{{ pillarDetails.model || 'Charging Pillar' }}</h3>
+          <p class="pillar-id">ID: #{{ pillarDetails.id }}</p>
+          <p class="pillar-station">
+            <ion-icon name="business-outline"></ion-icon>
+            {{ pillarDetails.station || pillarDetails.station_name || 'Charging Station' }}
+          </p>
+          <p class="pillar-owner">
+            <ion-icon name="person-outline"></ion-icon>
+            {{ pillarDetails.owner || pillarDetails.owner_name || 'Unknown Owner' }}
+          </p>
+        </div>
+      </div>
+
+      <div class="wallet-section">
+        <div class="wallet-balance">
+          <span class="balance-label">Your Wallet Balance</span>
+          <span class="balance-amount">KES {{ walletBalance | number:'1.2-2' }}</span>
+        </div>
+        @if (walletBalance < MINIMUM_BALANCE) {
+          <div class="balance-warning">
+            <ion-icon name="warning-outline"></ion-icon>
+            <span>Minimum balance of KES {{ MINIMUM_BALANCE }} required</span>
+            <ion-button fill="clear" size="small" (click)="navigateToWallet()">
+              Top Up
+              <ion-icon name="arrow-forward-outline" slot="end"></ion-icon>
+            </ion-button>
+          </div>
+        }
+      </div>
+
+      <div class="preview-actions">
+        <ion-button fill="outline" expand="block" (click)="cancelScan()">
+          <ion-icon name="close-outline" slot="start"></ion-icon>
+          Cancel
+        </ion-button>
+        <ion-button expand="block" (click)="confirmStartSession()"
+                    [disabled]="walletBalance < MINIMUM_BALANCE || isProcessing">
+          @if (isProcessing) {
+            <ion-spinner name="circular" slot="start"></ion-spinner>
+            Starting...
+          } @else {
+            <ion-icon name="flash-outline" slot="start"></ion-icon>
+            Start Charging
+          }
+        </ion-button>
+      </div>
+    </div>
+  }
+</ion-content>

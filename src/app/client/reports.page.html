@@ -1,0 +1,49 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Reports</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingIcon="refresh-outline" pullingText="Pull to refresh"></ion-refresher-content>
+  </ion-refresher>
+
+  <div class="page-container ion-padding">
+    <h1>My Reports</h1>
+    <p>View your charging reports and summaries.</p>
+
+    @if (loading) {
+      <div class="loading-container">
+        <ion-spinner name="circular"></ion-spinner>
+        <p>Loading reports...</p>
+      </div>
+    }
+
+    @if (!loading && reports.length === 0) {
+      <div class="empty-state">
+        <ion-icon name="document-text-outline"></ion-icon>
+        <h3>No Reports Yet</h3>
+        <p>Reports will appear here after your first charging session.</p>
+        <ion-button expand="block" routerLink="/client/sessions">View Sessions</ion-button>
+      </div>
+    }
+
+    @if (!loading && reports.length > 0) {
+      <ion-list>
+        @for (report of reports; track report.id ?? report.report_id ?? $index) {
+          <ion-item>
+            <ion-icon slot="start" name="document-text-outline" color="primary"></ion-icon>
+            <ion-label>
+              <h2>{{ report.title || 'Charging Report' }}</h2>
+              <p>{{ report.summary || report.description }}</p>
+              @if (report.date) {
+                <p class="report-date">{{ report.date | date:'mediumDate' }}</p>
+              }
+            </ion-label>
+          </ion-item>
+        }
+      </ion-list>
+    }
+  </div>
+</ion-content>

@@ -1,0 +1,109 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>My Wallet</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingIcon="refresh-outline" pullingText="Pull to refresh"></ion-refresher-content>
+  </ion-refresher>
+
+  <div class="page-container ion-padding">
+    <!-- Balance card -->
+    <ion-card class="balance-card">
+      <ion-card-header>
+        <ion-card-title>Wallet Balance</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="balance-display">
+          <span class="balance-label">Current Balance</span>
+          @if (loading) {
+            <ion-spinner name="circular"></ion-spinner>
+          } @else {
+            <span class="balance-amount">{{ formatAmount(balance) }}</span>
+          }
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- M-Pesa top-up -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Top Up with M-Pesa</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item>
+          <ion-label position="floating">Amount (KES)</ion-label>
+          <ion-input
+            type="number"
+            placeholder="e.g. 500"
+            [(ngModel)]="topUpAmount"
+            name="topUpAmount"
+          ></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">M-Pesa Phone Number</ion-label>
+          <ion-input
+            type="tel"
+            placeholder="e.g. 0712 345 678"
+            [(ngModel)]="phoneNumber"
+            name="phoneNumber"
+          ></ion-input>
+        </ion-item>
+        <p class="topup-note">
+          You will receive an M-Pesa STK push prompt to complete the payment.
+        </p>
+        <ion-button expand="block" (click)="topUp()" [disabled]="toppingUp">
+          @if (toppingUp) {
+            <ion-spinner name="circular" slot="start"></ion-spinner>
+            Processing...
+          } @else {
+            <ion-icon name="phone-portrait-outline" slot="start"></ion-icon>
+            Top Up
+          }
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Transactions -->
+    <h2 class="section-title">Transaction History</h2>
+    @if (loadingTransactions) {
+      <div class="loading-container">
+        <ion-spinner name="circular"></ion-spinner>
+        <p>Loading transactions...</p>
+      </div>
+    }
+
+    @if (!loadingTransactions && transactions.length > 0) {
+      <ion-list>
+        @for (tx of transactions; track tx.id ?? tx.transaction_id ?? $index) {
+          <ion-item>
+            <ion-icon
+              slot="start"
+              [name]="tx.type === 'debit' ? 'arrow-down-circle-outline' : 'arrow-up-circle-outline'"
+              [color]="tx.type === 'debit' ? 'danger' : 'success'"
+            ></ion-icon>
+            <ion-label>
+              <h2>{{ tx.description || (tx.type === 'debit' ? 'Charging debit' : 'Wallet top-up') }}</h2>
+              <p>{{ tx.created_at | date:'medium' }}</p>
+            </ion-label>
+            <span slot="end" class="tx-amount" [class.credit]="tx.type !== 'debit'">
+              {{ formatAmount(tx.amount) }}
+            </span>
+          </ion-item>
+        }
+      </ion-list>
+    }
+
+    @if (!loadingTransactions && transactions.length === 0) {
+      <div class="empty-state">
+        <ion-icon name="wallet-outline"></ion-icon>
+        <h3>No Transactions Yet</h3>
+        <p>Top up your wallet to start charging your EV.</p>
+      </div>
+    }
+
+    <ion-button expand="block" fill="outline" routerLink="/client/sessions">View Sessions</ion-button>
+  </div>
+</ion-content>

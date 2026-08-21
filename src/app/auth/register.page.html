@@ -1,0 +1,89 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Register</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="auth-container">
+    <h1>Create Charg-E Account</h1>
+    <p>Sign up to start charging your EV.</p>
+
+    <form (ngSubmit)="register()">
+      <ion-item>
+        <ion-label position="floating">Full name</ion-label>
+        <ion-input
+          type="text"
+          placeholder="Enter your full name"
+          [(ngModel)]="name"
+          name="name"
+          required
+        ></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Email</ion-label>
+        <ion-input
+          type="email"
+          placeholder="Enter your email"
+          [(ngModel)]="email"
+          name="email"
+          required
+        ></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Phone (optional)</ion-label>
+        <ion-input
+          type="tel"
+          placeholder="e.g. 0712 345 678"
+          [(ngModel)]="phone"
+          name="phone"
+        ></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Password</ion-label>
+        <ion-input
+          type="password"
+          placeholder="Create a password (min 8 characters)"
+          [(ngModel)]="password"
+          name="password"
+          required
+        ></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Confirm password</ion-label>
+        <ion-input
+          type="password"
+          placeholder="Re-enter your password"
+          [(ngModel)]="confirmPassword"
+          name="confirmPassword"
+          required
+        ></ion-input>
+      </ion-item>
+
+      @if (showError) {
+        <div class="error-message">
+          <ion-icon name="alert-circle-outline"></ion-icon>
+          <p>{{ errorMessage }}</p>
+        </div>
+      }
+
+      <div class="auth-actions">
+        <ion-button expand="block" type="submit" [disabled]="loading">
+          @if (loading) {
+            <ion-spinner name="circular" slot="start"></ion-spinner>
+            Creating Account...
+          } @else {
+            Register
+          }
+        </ion-button>
+        <ion-button expand="block" fill="clear" (click)="goToLogin()">
+          Back to login
+        </ion-button>
+      </div>
+    </form>
+  </div>
+</ion-content>

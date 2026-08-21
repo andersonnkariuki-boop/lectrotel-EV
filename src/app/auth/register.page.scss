@@ -1,0 +1,18 @@
+.auth-container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding-top: 20px;
+
+  h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 24px;
+  }
+}
+
+.auth-actions {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}

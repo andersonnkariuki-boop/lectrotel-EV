@@ -1,0 +1,68 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Client Dashboard</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Dashboard</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <div class="page-container">
+    <div class="welcome-section">
+      <h1>Welcome back, {{ user?.name || 'User' }}!</h1>
+      <p>Manage your EV charging sessions and wallet</p>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="stats-container">
+      <ion-card class="stat-card wallet-card" (click)="goToWallet()">
+        <ion-card-header>
+          <ion-icon name="wallet-outline" class="stat-icon"></ion-icon>
+          <h3 class="stat-title">Wallet Balance</h3>
+          <p class="balance-amount">KES {{ walletBalance.toLocaleString() }}</p>
+        </ion-card-header>
+      </ion-card>
+
+      <ion-card class="stat-card" (click)="goToSessions()">
+        <ion-card-header>
+          <ion-icon name="flash-outline" class="stat-icon"></ion-icon>
+          <h3 class="stat-title">Active Sessions</h3>
+          <p class="stat-value">{{ activeSessions }}</p>
+        </ion-card-header>
+      </ion-card>
+
+      <ion-card class="stat-card" (click)="goToPillars()">
+        <ion-card-header>
+          <ion-icon name="battery-dead-outline" class="stat-icon"></ion-icon>
+          <h3 class="stat-title">Available Pillars</h3>
+          <p class="stat-value">{{ totalPillars }}</p>
+        </ion-card-header>
+      </ion-card>
+    </div>
+
+    <!-- Quick Actions Card -->
+    <ion-card class="actions-card">
+      <ion-card-header>
+        <ion-card-title>Quick Actions</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-button expand="block" fill="solid" color="success" (click)="openQRScan()">
+          <ion-icon name="qr-code-outline" slot="start"></ion-icon>
+          Scan to Charge
+        </ion-button>
+        <ion-button expand="block" fill="outline" (click)="goToSessions()">
+          <ion-icon name="list-outline" slot="start"></ion-icon>
+          My Sessions
+        </ion-button>
+        <ion-button expand="block" fill="outline" (click)="goToPillars()">
+          <ion-icon name="business-outline" slot="start"></ion-icon>
+          Find Pillars
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

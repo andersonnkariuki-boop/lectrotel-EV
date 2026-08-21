@@ -1,0 +1,110 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Charging Pillars</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="openQRScan()" class="qr-button">
+        <ion-icon name="qr-code-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <!-- Header Section -->
+  <div class="page-header">
+    <h1>Available Pillars</h1>
+    <p>Find and start charging at nearby pillars</p>
+  </div>
+
+  <!-- QR Scan Quick Action -->
+  <div class="quick-scan-card" (click)="openQRScan()">
+    <ion-icon name="qr-code-outline" class="scan-icon-large"></ion-icon>
+    <div class="scan-text">
+      <h3>Scan to Charge</h3>
+      <p>Scan QR code on any pillar to start charging instantly</p>
+    </div>
+    <ion-icon name="arrow-forward-outline" class="arrow-icon"></ion-icon>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters-container">
+    <ion-searchbar 
+      [(ngModel)]="searchTerm" 
+      (ionInput)="onSearch()"
+      placeholder="Search pillars..."
+      animated
+      class="search-bar"
+    ></ion-searchbar>
+    
+    <ion-segment [(ngModel)]="selectedFilter" (ionChange)="onFilterChange()">
+      <ion-segment-button value="all">
+        <ion-label>All</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="available">
+        <ion-label>Available</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="active">
+        <ion-label>In Use</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </div>
+
+  <!-- Loading -->
+  @if (loading) {
+    <div class="loading-container">
+      <ion-spinner name="circular"></ion-spinner>
+      <p>Loading pillars...</p>
+    </div>
+  }
+
+  <!-- No Results -->
+  @if (!loading && filteredPillars.length === 0) {
+    <div class="empty-state">
+      <ion-icon name="battery-dead-outline"></ion-icon>
+      <h3>No Pillars Found</h3>
+      <p>No charging pillars available in your area. Try adjusting your filters.</p>
+    </div>
+  }
+
+  <!-- Pillars List -->
+  @if (!loading && filteredPillars.length > 0) {
+    <ion-list class="pillars-list">
+      @for (pillar of filteredPillars; track pillar.charging_pillar_id) {
+        <ion-item class="pillar-item">
+          <ion-thumbnail slot="start" class="pillar-thumbnail">
+            <div class="status-indicator" [class]="getStatusClass(pillar)">
+              <ion-icon [name]="getStatusClass(pillar) === 'active' ? 'flash-outline' : (getStatusClass(pillar) === 'available' ? 'checkmark-circle-outline' : (getStatusClass(pillar) === 'suspended' ? 'ban-outline' : 'power-outline'))"></ion-icon>
+            </div>
+          </ion-thumbnail>
+          
+          <ion-label class="pillar-label">
+            <h2>{{ pillar.model || 'Charging Pillar' }}</h2>
+            <p class="pillar-id">#{{ pillar.charging_pillar_id }}</p>
+            <p class="pillar-status">
+              <span class="status-badge" [class]="getStatusClass(pillar)">
+                {{ getStatusLabel(pillar) }}
+              </span>
+            </p>
+            <p class="pillar-energy">
+              <ion-icon name="flash-outline"></ion-icon>
+              {{ pillar.energy_reading || 0 }} kWh
+            </p>
+          </ion-label>
+
+          <ion-buttons slot="end">
+            @if (getStatusClass(pillar) === 'available') {
+              <ion-button fill="solid" color="success" (click)="openQRScan()">
+                <ion-icon name="flash-outline"></ion-icon>
+                Charge
+              </ion-button>
+            } @else {
+              <ion-button fill="outline" color="medium" disabled>
+                <ion-icon name="lock-closed-outline"></ion-icon>
+              </ion-button>
+            }
+          </ion-buttons>
+        </ion-item>
+      }
+    </ion-list>
+  }
+</ion-content>

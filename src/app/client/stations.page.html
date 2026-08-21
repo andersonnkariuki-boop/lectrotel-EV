@@ -1,0 +1,85 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Stations</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingIcon="refresh-outline" pullingText="Pull to refresh"></ion-refresher-content>
+  </ion-refresher>
+
+  <div class="page-container ion-padding">
+    <h1>Charging Stations</h1>
+    <p>Find available charging stations near you.</p>
+
+    @if (loading) {
+      <div class="loading-container">
+        <ion-spinner name="circular"></ion-spinner>
+        <p>Loading stations...</p>
+      </div>
+    }
+
+    @if (!loading && stations.length === 0) {
+      <div class="empty-state">
+        <ion-icon name="business-outline"></ion-icon>
+        <h3>No Stations Available</h3>
+        <p>Check back later for available charging stations.</p>
+      </div>
+    }
+
+    @if (!loading && stations.length > 0) {
+      <ion-list class="stations-list">
+        @for (station of stations; track station.charging_station_id) {
+          <ion-item button class="station-item" (click)="toggleStation(station)">
+            <ion-icon slot="start" name="business-outline" color="primary"></ion-icon>
+            <ion-label>
+              <h2>{{ station.name }}</h2>
+              <p>{{ station.location || station.address || station.city }}</p>
+              <p class="station-stats">
+                @if (station.total_pillars !== undefined) {
+                  <ion-badge color="medium">{{ station.total_pillars }} pillars</ion-badge>
+                }
+                @if (station.available_pillars !== undefined) {
+                  <ion-badge color="success">{{ station.available_pillars }} available</ion-badge>
+                }
+              </p>
+            </ion-label>
+            <ion-icon slot="end" [name]="expandedStationId === station.charging_station_id ? 'chevron-up-outline' : 'chevron-down-outline'"></ion-icon>
+          </ion-item>
+
+          @if (expandedStationId === station.charging_station_id) {
+            <div class="station-pillars">
+              @if (loadingPillars) {
+                <div class="loading-container small">
+                  <ion-spinner name="circular"></ion-spinner>
+                  <p>Loading pillars...</p>
+                </div>
+              }
+              @if (!loadingPillars && station._pillars && station._pillars.length === 0) {
+                <div class="empty-state small">
+                  <p>No pillars at this station.</p>
+                </div>
+              }
+              @if (station._pillars && station._pillars.length > 0) {
+                <ion-list>
+                  @for (pillar of station._pillars; track pillar.charging_pillar_id) {
+                    <ion-item>
+                      <ion-label>
+                        <h2>{{ pillar.model || 'Charging Pillar' }} <span class="pillar-id">#{{ pillar.charging_pillar_id }}</span></h2>
+                        <p>{{ pillar.status.label }}</p>
+                      </ion-label>
+                      <span slot="end" class="status-dot" [class]="pillar.status.color"></span>
+                    </ion-item>
+                  }
+                </ion-list>
+              }
+            </div>
+          }
+        }
+      </ion-list>
+    }
+
+    <ion-button expand="block" routerLink="/scan/qr-scan">Scan Station QR</ion-button>
+  </div>
+</ion-content>

@@ -1,0 +1,54 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Admin Clients</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingIcon="refresh-outline" pullingText="Pull to refresh"></ion-refresher-content>
+  </ion-refresher>
+
+  <div class="page-container ion-padding">
+    <h1>Manage Clients</h1>
+    <p>View and manage all registered clients.</p>
+
+    @if (loading) {
+      <div class="loading-container">
+        <ion-spinner name="circular"></ion-spinner>
+        <p>Loading clients...</p>
+      </div>
+    }
+
+    @if (!loading && clients.length === 0) {
+      <div class="empty-state">
+        <ion-icon name="people-outline"></ion-icon>
+        <h3>No Clients Registered</h3>
+        <p>Registered clients will appear here.</p>
+      </div>
+    }
+
+    @if (!loading && clients.length > 0) {
+      <ion-list>
+        @for (client of clients; track client.user_id ?? client.id) {
+          <ion-item>
+            <ion-icon slot="start" name="person-outline" color="primary"></ion-icon>
+            <ion-label>
+              <h2>{{ client.name }}</h2>
+              <p>{{ client.email }}
+                @if (client.phone) {
+                  · {{ client.phone }}
+                }
+              </p>
+            </ion-label>
+            @if (client.user_amount !== undefined) {
+              <ion-badge slot="end" color="success">KES {{ client.user_amount }}</ion-badge>
+            }
+          </ion-item>
+        }
+      </ion-list>
+    }
+
+    <ion-button expand="block" routerLink="/admin/dashboard">Back to Dashboard</ion-button>
+  </div>
+</ion-content>

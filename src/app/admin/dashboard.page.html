@@ -1,0 +1,78 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Admin Dashboard</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="page-container">
+    <h1>Admin Dashboard</h1>
+    <p>Manage the Charg-E platform.</p>
+
+    @if (loading) {
+      <div class="loading-container">
+        <ion-spinner name="circular"></ion-spinner>
+        <p>Loading metrics...</p>
+      </div>
+    } @else {
+      <ion-grid>
+        <ion-row>
+          <ion-col size="6">
+            <ion-card>
+              <ion-card-header>
+                <ion-card-title>Sessions</ion-card-title>
+              </ion-card-header>
+              <ion-card-content>
+                <strong class="stat-number">{{ sessionCount }}</strong>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+          <ion-col size="6">
+            <ion-card>
+              <ion-card-header>
+                <ion-card-title>Pillars</ion-card-title>
+              </ion-card-header>
+              <ion-card-content>
+                <strong class="stat-number">{{ pillarCount }}</strong>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+          <ion-col size="6">
+            <ion-card>
+              <ion-card-header>
+                <ion-card-title>Stations</ion-card-title>
+              </ion-card-header>
+              <ion-card-content>
+                <strong class="stat-number">{{ stationCount }}</strong>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+          <ion-col size="6">
+            <ion-card>
+              <ion-card-header>
+                <ion-card-title>Clients</ion-card-title>
+              </ion-card-header>
+              <ion-card-content>
+                <strong class="stat-number">{{ clientCount }}</strong>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    }
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Management</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-button expand="block" routerLink="/admin/pillars">Manage Pillars</ion-button>
+        <ion-button expand="block" fill="outline" routerLink="/admin/stations">Manage Stations</ion-button>
+        <ion-button expand="block" fill="outline" routerLink="/admin/sessions">View Sessions</ion-button>
+        <ion-button expand="block" fill="outline" routerLink="/admin/clients">Manage Clients</ion-button>
+        <ion-button expand="block" fill="outline" routerLink="/admin/reports">Reports</ion-button>
+        <ion-button expand="block" fill="outline" routerLink="/admin/wallet">Wallet Overview</ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

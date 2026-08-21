@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">LEV Charger</string>
+    <string name="title_activity_main">LEV Charger</string>
+    <string name="package_name">lev.charger.com</string>
+    <string name="custom_url_scheme">lev.charger.com</string>
+</resources>

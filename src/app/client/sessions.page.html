@@ -1,0 +1,67 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>My Sessions</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">My Sessions</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <div class="page-container">
+    <h1>Charging Sessions</h1>
+    <p>View your past and active charging sessions</p>
+
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+      <ion-refresher-content pullingIcon="refresh-outline" pullingText="Pull to refresh"></ion-refresher-content>
+    </ion-refresher>
+
+    @if (loading) {
+      <div class="loading-container">
+        <ion-spinner name="circular"></ion-spinner>
+        <p>Loading sessions...</p>
+      </div>
+    }
+
+    @if (!loading && sessions.length > 0) {
+      <ion-list class="sessions-list">
+        @for (session of sessions; track session.charging_session_id) {
+          <ion-item class="session-item" lines="inset">
+            <ion-label>
+              <h2 class="session-title">
+                <ion-icon name="flash-outline" style="margin-right: 8px;"></ion-icon>
+                Pillar #{{ session.charging_pillar_id }}
+              </h2>
+              <p class="session-time">
+                Started: {{ session.start_time | date:'short' }}
+                @if (session.end_time) {
+                  <br>Ended: {{ session.end_time | date:'short' }}
+                }
+              </p>
+              <p class="session-duration">Duration: {{ session.duration }}</p>
+              <ion-badge [color]="session.statusColor">{{ session.statusLabel }}</ion-badge>
+            </ion-label>
+          </ion-item>
+        }
+      </ion-list>
+    }
+
+    @if (!loading && sessions.length === 0) {
+      <div class="empty-state">
+        <ion-icon name="battery-charging-outline"></ion-icon>
+        <h3>No Sessions Yet</h3>
+        <p>Start your first charging session by scanning a QR code at any pillar.</p>
+      </div>
+    }
+
+    <div class="actions-container">
+      <ion-button expand="block" fill="solid" (click)="openQRScan()">
+        <ion-icon name="scan-outline" slot="start"></ion-icon>
+        Start New Session
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

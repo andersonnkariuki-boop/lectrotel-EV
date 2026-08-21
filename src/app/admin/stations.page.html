@@ -1,0 +1,53 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Admin Stations</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingIcon="refresh-outline" pullingText="Pull to refresh"></ion-refresher-content>
+  </ion-refresher>
+
+  <div class="page-container ion-padding">
+    <h1>Manage Stations</h1>
+    <p>Oversee all charging stations in the network.</p>
+
+    @if (loading) {
+      <div class="loading-container">
+        <ion-spinner name="circular"></ion-spinner>
+        <p>Loading stations...</p>
+      </div>
+    }
+
+    @if (!loading && stations.length === 0) {
+      <div class="empty-state">
+        <ion-icon name="business-outline"></ion-icon>
+        <h3>No Stations Registered</h3>
+        <p>Add new charging stations to the network.</p>
+      </div>
+    }
+
+    @if (!loading && stations.length > 0) {
+      <ion-list>
+        @for (station of stations; track station.charging_station_id) {
+          <ion-item>
+            <ion-label>
+              <h2>{{ station.name }}</h2>
+              <p>{{ station.location || station.address || station.city }}</p>
+              @if (station.total_pillars !== undefined) {
+                <p>{{ station.total_pillars }} pillars
+                  @if (station.available_pillars !== undefined) {
+                    · {{ station.available_pillars }} available
+                  }
+                </p>
+              }
+            </ion-label>
+          </ion-item>
+        }
+      </ion-list>
+    }
+
+    <ion-button expand="block" routerLink="/admin/pillars">Manage Pillars</ion-button>
+  </div>
+</ion-content>

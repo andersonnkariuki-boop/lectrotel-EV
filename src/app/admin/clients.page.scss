@@ -1,0 +1,19 @@
+.page-container {
+  max-width: 600px;
+  margin: 0 auto;
+
+  h1 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  p {
+    color: var(--ion-color-medium);
+    margin-bottom: 16px;
+  }
+}
+
+ion-list {
+  margin-bottom: 16px;
+}

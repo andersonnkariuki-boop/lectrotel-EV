@@ -1,0 +1,35 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Admin Wallet</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="page-container">
+    <h1>Wallet Overview</h1>
+    <p>Monitor all wallet transactions across the platform.</p>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Platform Balance</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="balance-display">
+          <span class="balance-label">Total Balance</span>
+          <span class="balance-amount">$0.00</span>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-list>
+      <ion-item>
+        <ion-label>
+          <h2>No transactions yet</h2>
+          <p>Wallet transactions will appear here.</p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+
+    <ion-button expand="block" routerLink="/admin/dashboard">Back to Dashboard</ion-button>
+  </div>
+</ion-content>

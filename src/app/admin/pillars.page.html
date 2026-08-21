@@ -1,0 +1,47 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Admin Pillars</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingIcon="refresh-outline" pullingText="Pull to refresh"></ion-refresher-content>
+  </ion-refresher>
+
+  <div class="page-container ion-padding">
+    <h1>Manage Pillars</h1>
+    <p>Oversee all charging pillars in the network.</p>
+
+    @if (loading) {
+      <div class="loading-container">
+        <ion-spinner name="circular"></ion-spinner>
+        <p>Loading pillars...</p>
+      </div>
+    }
+
+    @if (!loading && pillars.length === 0) {
+      <div class="empty-state">
+        <ion-icon name="battery-dead-outline"></ion-icon>
+        <h3>No Pillars Registered</h3>
+        <p>Add pillars to stations from station management.</p>
+      </div>
+    }
+
+    @if (!loading && pillars.length > 0) {
+      <ion-list>
+        @for (pillar of pillars; track pillar.charging_pillar_id) {
+          <ion-item>
+            <ion-label>
+              <h2>{{ pillar.model || 'Charging Pillar' }} <span class="pillar-id">#{{ pillar.charging_pillar_id }}</span></h2>
+              <p>{{ pillar.station_name || 'Unassigned' }} · {{ pillar.energy_reading || 0 }} kWh</p>
+            </ion-label>
+            <ion-badge slot="end" [color]="pillar.status?.color">{{ pillar.status?.label }}</ion-badge>
+          </ion-item>
+        }
+      </ion-list>
+    }
+
+    <ion-button expand="block" routerLink="/admin/stations">Manage Stations</ion-button>
+  </div>
+</ion-content>
