@@ -1,7 +1,10 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>Admin Dashboard</ion-title>
+    <ion-title>Operations</ion-title>
     <ion-buttons slot="end">
+      <ion-button fill="clear" aria-label="Refresh dashboard" (click)="refreshDashboard()">
+        <ion-icon name="refresh-outline" slot="icon-only"></ion-icon>
+      </ion-button>
       <ion-button fill="clear" aria-label="Log out" (click)="logout()">
         <ion-icon name="log-out-outline" slot="icon-only"></ion-icon>
       </ion-button>
@@ -11,8 +14,36 @@
 
 <ion-content [fullscreen]="true" class="ion-padding">
   <div class="page-container">
-    <h1>Admin Dashboard</h1>
-    <p>Manage the Charg-E platform.</p>
+    <div class="hero-heading">
+      <div>
+        <span class="eyebrow">LECTROTEL CONTROL CENTER</span>
+        <h1>{{ roleLabel }} workspace</h1>
+        <p>Monitor your charging network and take action from the field.</p>
+      </div>
+      <div class="status-chip"><span></span> Live network</div>
+    </div>
+
+    <ion-card class="operations-card">
+      <ion-card-header>
+        <div class="section-heading">
+          <div class="section-icon"><ion-icon name="flash-outline"></ion-icon></div>
+          <div>
+            <ion-card-title>Charging operations</ion-card-title>
+            <p>Start or monitor a session in seconds.</p>
+          </div>
+        </div>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-button expand="block" color="success" (click)="openQrScanner()">
+          <ion-icon name="qr-code-outline" slot="start"></ion-icon>
+          Scan pillar to start session
+        </ion-button>
+        <ion-button expand="block" fill="outline" (click)="goTo('/admin/sessions')">
+          <ion-icon name="flash-outline" slot="start"></ion-icon>
+          Monitor charging sessions
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
 
     @if (loading) {
       <div class="loading-container">
@@ -23,42 +54,50 @@
       <ion-grid>
         <ion-row>
           <ion-col size="6">
-            <ion-card>
+            <ion-card class="metric-card sessions" (click)="goTo('/admin/sessions')">
               <ion-card-header>
+                <ion-icon name="flash-outline"></ion-icon>
                 <ion-card-title>Sessions</ion-card-title>
               </ion-card-header>
               <ion-card-content>
                 <strong class="stat-number">{{ sessionCount }}</strong>
+                <span>View activity</span>
               </ion-card-content>
             </ion-card>
           </ion-col>
           <ion-col size="6">
-            <ion-card>
+            <ion-card class="metric-card pillars" (click)="goTo('/admin/pillars')">
               <ion-card-header>
+                <ion-icon name="battery-charging-outline"></ion-icon>
                 <ion-card-title>Pillars</ion-card-title>
               </ion-card-header>
               <ion-card-content>
                 <strong class="stat-number">{{ pillarCount }}</strong>
+                <span>Manage assets</span>
               </ion-card-content>
             </ion-card>
           </ion-col>
           <ion-col size="6">
-            <ion-card>
+            <ion-card class="metric-card stations" (click)="goTo('/admin/stations')">
               <ion-card-header>
+                <ion-icon name="business-outline"></ion-icon>
                 <ion-card-title>Stations</ion-card-title>
               </ion-card-header>
               <ion-card-content>
                 <strong class="stat-number">{{ stationCount }}</strong>
+                <span>Network locations</span>
               </ion-card-content>
             </ion-card>
           </ion-col>
           <ion-col size="6">
-            <ion-card>
+            <ion-card class="metric-card clients" (click)="goTo('/admin/clients')">
               <ion-card-header>
+                <ion-icon name="people-outline"></ion-icon>
                 <ion-card-title>Clients</ion-card-title>
               </ion-card-header>
               <ion-card-content>
                 <strong class="stat-number">{{ clientCount }}</strong>
+                <span>Customer accounts</span>
               </ion-card-content>
             </ion-card>
           </ion-col>
@@ -66,21 +105,36 @@
       </ion-grid>
     }
 
-    <ion-card>
+    <ion-card class="management-card">
       <ion-card-header>
-        <ion-card-title>Management</ion-card-title>
+        <span class="eyebrow">FIELD MANAGEMENT</span>
+        <ion-card-title>Quick access</ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        <ion-button expand="block" routerLink="/admin/pillars">Manage Pillars</ion-button>
-        <ion-button expand="block" fill="outline" routerLink="/admin/stations">Manage Stations</ion-button>
-        <ion-button expand="block" fill="outline" routerLink="/admin/sessions">View Sessions</ion-button>
-        <ion-button expand="block" fill="outline" routerLink="/admin/clients">Manage Clients</ion-button>
-        <ion-button expand="block" fill="outline" color="secondary" routerLink="/auth/register">
+        <ion-button expand="block" fill="outline" (click)="goTo('/admin/pillars')">
+          <ion-icon name="battery-charging-outline" slot="start"></ion-icon>
+          Manage pillars
+        </ion-button>
+        <ion-button expand="block" fill="outline" (click)="goTo('/admin/stations')">
+          <ion-icon name="business-outline" slot="start"></ion-icon>
+          Manage stations
+        </ion-button>
+        <ion-button expand="block" fill="outline" (click)="goTo('/admin/clients')">
+          <ion-icon name="people-outline" slot="start"></ion-icon>
+          Manage clients
+        </ion-button>
+        <ion-button expand="block" fill="outline" color="secondary" (click)="goTo('/auth/register')">
           <ion-icon name="person-add-outline" slot="start"></ion-icon>
           Create Account
         </ion-button>
-        <ion-button expand="block" fill="outline" routerLink="/admin/reports">Reports</ion-button>
-        <ion-button expand="block" fill="outline" routerLink="/admin/wallet">Wallet Overview</ion-button>
+        <div class="secondary-actions">
+          <ion-button fill="clear" (click)="goTo('/admin/reports')">
+            <ion-icon name="document-text-outline" slot="start"></ion-icon> Reports
+          </ion-button>
+          <ion-button fill="clear" (click)="goTo('/admin/wallet')">
+            <ion-icon name="wallet-outline" slot="start"></ion-icon> Wallet
+          </ion-button>
+        </div>
       </ion-card-content>
     </ion-card>
   </div>

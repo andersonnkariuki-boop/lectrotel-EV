@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { IonicModule } from "@ionic/angular";
+import { IonicModule, NavController } from "@ionic/angular";
 import { SessionService } from "../services/session.service";
 import { PillarService } from "../services/pillar.service";
 import { StationService } from "../services/station.service";
@@ -26,6 +26,7 @@ export class AdminDashboardPage implements OnInit {
   private stationService = inject(StationService);
   private clientService = inject(ClientService);
   private auth = inject(AuthService);
+  private navCtrl = inject(NavController);
 
   ngOnInit() {
     this.loadStats();
@@ -54,5 +55,22 @@ export class AdminDashboardPage implements OnInit {
 
   logout() {
     this.auth.logout();
+  }
+
+  openQrScanner() {
+    this.navCtrl.navigateForward('/scan/qr-scan');
+  }
+
+  goTo(path: string) {
+    this.navCtrl.navigateRoot(path);
+  }
+
+  refreshDashboard() {
+    this.loadStats();
+  }
+
+  get roleLabel(): string {
+    return this.auth.userRole === 'super_admin' ? 'Super Admin' :
+      this.auth.userRole === 'owner' ? 'Pillar Owner' : 'Admin';
   }
 }
