@@ -47,14 +47,13 @@ export class RegisterPage {
 
     this.loading = true;
     try {
-      await this.auth.register(this.name.trim(), this.email.trim(), this.password).toPromise();
-      const user = this.auth.currentUser;
-      // Keep consistent with the ClientGuard / AdminGuard role routing.
-      if (user?.role === 'admin' || user?.role === 'super_admin' || user?.role === 'owner') {
-        this.navCtrl.navigateRoot('/admin/dashboard');
-      } else {
-        this.navCtrl.navigateRoot('/client/dashboard');
-      }
+      await this.auth.createAccount(
+        this.name.trim(),
+        this.email.trim(),
+        this.password,
+        this.phone.trim()
+      ).toPromise();
+      this.navCtrl.navigateRoot('/admin/clients');
     } catch (error: any) {
       this.showError = true;
       this.errorMessage = error.error?.message || error.message || 'Registration failed. Please try again.';

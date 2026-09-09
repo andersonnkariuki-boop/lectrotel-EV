@@ -33,15 +33,22 @@ export class ClientDashboardPage implements OnInit {
   }
 
   loadDashboardData() {
-    // Load wallet balance
-    if (this.user?.user_amount !== undefined) {
-      this.walletBalance = this.user.user_amount;
-    }
+    this.walletService.getWallet().subscribe({
+      next: (response: any) => {
+        const wallet = response?.data ?? response?.wallet ?? response;
+        const balance = Number(wallet?.user_amount ?? wallet?.balance ?? wallet?.amount);
+        this.walletBalance = Number.isFinite(balance) ? balance : 0;
+      },
+      error: (error: any) => console.error('Error loading wallet:', error)
+    });
 
     // Load sessions count
     this.sessionService.getSessions().subscribe({
       next: (response: any) => {
-        const sessions = response?.items || response || [];
+        const userId = this.auth.getUserId();
+        const sessions = (response?.items || response || []).filter((s: any) =>
+          Number(s.user_creator ?? s.user_id) === Number(userId)
+        );
         this.activeSessions = sessions.filter((s: any) => !s.end_time).length;
         this.loading = false;
       },
@@ -77,5 +84,9 @@ export class ClientDashboardPage implements OnInit {
 
   goToWallet() {
     this.navCtrl.navigateForward('/client/wallet');
+  }
+
+  logout() {
+    this.auth.logout();
   }
 }

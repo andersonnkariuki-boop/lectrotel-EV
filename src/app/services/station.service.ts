@@ -21,14 +21,14 @@ export class StationService {
 
   getStationById(id: number): any {
     return this.http.get<Station>(
-      `${this.url}chargingstations/${id}`,
+      `${this.url}chargingStation/${id}`,
       this.auth.jwtHeader()
     );
   }
 
   getStationPillars(id: number): any {
     return this.http.get<any>(
-      `${this.url}chargingstations/${id}/pillars`,
+      `${this.url}chargingpillar/list/${id}`,
       this.auth.jwtHeader()
     );
   }

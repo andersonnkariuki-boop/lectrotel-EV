@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { AuthGuard } from './guards/auth.guard';
 import { AdminGuard } from './guards/admin.guard';
 import { ClientGuard } from './guards/client.guard';
+import { AccountCreationGuard } from './guards/account-creation.guard';
 
 export const routes: Routes = [
   {
@@ -13,6 +14,7 @@ export const routes: Routes = [
       },
       {
         path: 'register',
+        canActivate: [AccountCreationGuard],
         loadComponent: () => import('./auth/register.page').then((m) => m.RegisterPage),
       },
       {

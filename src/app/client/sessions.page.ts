@@ -3,6 +3,7 @@ import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { IonicModule, NavController } from "@ionic/angular";
 import { SessionService } from "../services/session.service";
+import { AuthService } from "../services/auth.service";
 import { Subscription, interval } from "rxjs";
 
 @Component({
@@ -20,6 +21,7 @@ export class ClientSessionsPage implements OnInit, OnDestroy {
 
   private sessionService = inject(SessionService);
   private navCtrl = inject(NavController);
+  private auth = inject(AuthService);
 
   ngOnInit() {
     this.loadSessions();
@@ -34,7 +36,10 @@ export class ClientSessionsPage implements OnInit, OnDestroy {
     this.loading = true;
     this.sessionService.getSessions().subscribe({
       next: (response: any) => {
-        const items = response?.items || response || [];
+        const userId = this.auth.getUserId();
+        const items = (response?.items || response || []).filter((s: any) =>
+          Number(s.user_creator ?? s.user_id) === Number(userId)
+        );
         this.sessions = items.map((s: any) => ({
           ...s,
           isActive: !s.end_time,

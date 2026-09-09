@@ -1,33 +1,52 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>Login</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content [fullscreen]="true" class="login-content">
+  <div class="login-shell">
+    <section class="brand-panel" aria-label="Lectrotel EV">
+      <div class="energy-art" aria-hidden="true">
+        <svg viewBox="0 0 180 120" role="presentation">
+          <path class="energy-path" d="M18 88C43 88 45 28 78 28s30 64 62 64c11 0 18-5 22-13" />
+          <path class="energy-path faint" d="M10 61c20 0 25-25 47-25 18 0 23 25 40 25 20 0 25-29 51-29" />
+          <circle class="energy-node node-one" cx="18" cy="88" r="6" />
+          <circle class="energy-node node-two" cx="78" cy="28" r="6" />
+          <circle class="energy-node node-three" cx="140" cy="92" r="6" />
+          <circle class="energy-node node-four" cx="148" cy="32" r="5" />
+          <path class="energy-bolt" d="M102 45h12l-8 13h10l-19 22 5-15H92z" />
+        </svg>
+      </div>
+      <span class="eyebrow">LECTROTEL EV</span>
+      <h1>Powering every journey.</h1>
+      <p>Manage charging, stations, and energy with clarity from one connected workspace.</p>
+      <div class="brand-line" aria-hidden="true"></div>
+      <span class="brand-caption">Smart charging infrastructure</span>
+    </section>
 
-<ion-content [fullscreen]="true" class="ion-padding">
-  <div class="auth-container">
-    <h1>Charg-E Login</h1>
-    <p>Sign in to access your EV charging workspace.</p>
+    <section class="form-panel">
+      <div class="form-heading">
+        <span class="eyebrow">WELCOME BACK</span>
+        <h2>Sign in to your account</h2>
+        <p>Access your EV charging workspace securely.</p>
+      </div>
 
     <form (ngSubmit)="login()">
-      <ion-item>
-        <ion-label position="floating">Email</ion-label>
+      <ion-item lines="none" class="form-field">
+        <ion-label position="stacked">Email</ion-label>
         <ion-input 
           type="email" 
-          placeholder="Enter your email" 
+          placeholder="you@example.com"
           [(ngModel)]="email"
           name="email"
+          autocomplete="email"
           required
         ></ion-input>
       </ion-item>
 
-      <ion-item>
-        <ion-label position="floating">Password</ion-label>
+      <ion-item lines="none" class="form-field">
+        <ion-label position="stacked">Password</ion-label>
         <ion-input 
           type="password" 
-          placeholder="Enter your password" 
+          placeholder="Enter your password"
           [(ngModel)]="password"
           name="password"
+          autocomplete="current-password"
           required
         ></ion-input>
       </ion-item>
@@ -52,11 +71,9 @@
             Sign In
           }
         </ion-button>
-        <ion-button expand="block" fill="outline" (click)="navigateToRegister()">
-          Create Account
-          <ion-icon name="arrow-forward-outline" slot="end"></ion-icon>
-        </ion-button>
+        <p class="access-note">Account access is managed by your Lectrotel administrator.</p>
       </div>
     </form>
+    </section>
   </div>
 </ion-content>

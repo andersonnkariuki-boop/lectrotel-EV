@@ -37,6 +37,7 @@
             ],
             "styles": ["src/global.scss", "src/theme/variables.scss"],
             "scripts": [],
+            "allowedCommonJsDependencies": ["leaflet"],
             "browser": "src/main.ts"
           },
           "configurations": {

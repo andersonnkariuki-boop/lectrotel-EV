@@ -1,17 +1,14 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>Register</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content [fullscreen]="true" class="ion-padding">
+<ion-content [fullscreen]="true" class="account-content">
   <div class="auth-container">
-    <h1>Create Charg-E Account</h1>
-    <p>Sign up to start charging your EV.</p>
+    <div class="form-heading">
+      <span class="eyebrow">ACCOUNT MANAGEMENT</span>
+      <h1>Create a new account</h1>
+      <p>Add a new customer to the Lectrotel EV charging platform.</p>
+    </div>
 
     <form (ngSubmit)="register()">
       <ion-item>
-        <ion-label position="floating">Full name</ion-label>
+        <ion-label position="stacked">Full name</ion-label>
         <ion-input
           type="text"
           placeholder="Enter your full name"
@@ -22,7 +19,7 @@
       </ion-item>
 
       <ion-item>
-        <ion-label position="floating">Email</ion-label>
+        <ion-label position="stacked">Email</ion-label>
         <ion-input
           type="email"
           placeholder="Enter your email"
@@ -33,7 +30,7 @@
       </ion-item>
 
       <ion-item>
-        <ion-label position="floating">Phone (optional)</ion-label>
+        <ion-label position="stacked">Phone (optional)</ion-label>
         <ion-input
           type="tel"
           placeholder="e.g. 0712 345 678"
@@ -43,7 +40,7 @@
       </ion-item>
 
       <ion-item>
-        <ion-label position="floating">Password</ion-label>
+        <ion-label position="stacked">Password</ion-label>
         <ion-input
           type="password"
           placeholder="Create a password (min 8 characters)"
@@ -54,7 +51,7 @@
       </ion-item>
 
       <ion-item>
-        <ion-label position="floating">Confirm password</ion-label>
+        <ion-label position="stacked">Confirm password</ion-label>
         <ion-input
           type="password"
           placeholder="Re-enter your password"
@@ -80,8 +77,8 @@
             Register
           }
         </ion-button>
-        <ion-button expand="block" fill="clear" (click)="goToLogin()">
-          Back to login
+        <ion-button type="button" expand="block" fill="clear" (click)="goToLogin()">
+          Cancel and return
         </ion-button>
       </div>
     </form>

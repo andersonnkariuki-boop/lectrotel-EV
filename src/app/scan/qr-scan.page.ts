@@ -7,6 +7,7 @@ import { SessionService } from "../services/session.service";
 import { PillarService } from "../services/pillar.service";
 import { ToastService } from "../services/toast.service";
 import { AuthService } from "../services/auth.service";
+import { WalletService } from "../services/wallet.service";
 
 @Component({
   selector: "app-qr-scan",
@@ -29,6 +30,7 @@ export class QrScanPage implements OnInit, OnDestroy {
   private pillarService = inject(PillarService);
   private toast = inject(ToastService);
   private auth = inject(AuthService);
+  private walletService = inject(WalletService);
   private navCtrl = inject(NavController);
 
   ngOnInit() { this.getUserBalance(); }
@@ -118,23 +120,43 @@ export class QrScanPage implements OnInit, OnDestroy {
   }
 
   getUserBalance() {
-    const user = this.auth.currentUser;
-    this.walletBalance = user?.user_amount || 0;
+    this.walletService.getWallet().subscribe({
+      next: (wallet: any) => {
+        this.walletBalance = Number(wallet?.user_amount ?? 0);
+      },
+      error: () => {
+        const user = this.auth.currentUser;
+        this.walletBalance = Number(user?.user_amount ?? 0);
+      }
+    });
   }
 
   confirmStartSession() {
     if (!this.pillarDetails) return;
-    if (this.walletBalance < this.MINIMUM_BALANCE) {
-      this.toast.showError('Insufficient balance. Need KES ' + this.MINIMUM_BALANCE);
-      return;
-    }
-    this.isProcessing = true;
     const userId = this.auth.getUserId();
     if (!userId) {
       this.toast.showError('Please log in again');
-      this.isProcessing = false;
       return;
     }
+    this.isProcessing = true;
+    this.walletService.getWallet().subscribe({
+      next: (wallet: any) => {
+        this.walletBalance = Number(wallet?.user_amount ?? 0);
+        if (this.walletBalance < this.MINIMUM_BALANCE) {
+          this.isProcessing = false;
+          this.toast.showError('Insufficient balance. Need KES ' + this.MINIMUM_BALANCE);
+          return;
+        }
+        this.startChargingSession(userId);
+      },
+      error: () => {
+        this.isProcessing = false;
+        this.toast.showError('Unable to verify your wallet balance. Please try again.');
+      }
+    });
+  }
+
+  private startChargingSession(userId: number) {
     this.sessionService.startSession({ user_id: userId, charging_pillar_id: this.pillarDetails.id }).subscribe({
       next: () => {
         this.isProcessing = false;

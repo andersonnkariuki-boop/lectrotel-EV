@@ -24,24 +24,81 @@
 @import "@ionic/angular/css/text-alignment.css";
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
+@import "leaflet/dist/leaflet.css";
 
-/**
- * Ionic Dark Mode
- * -----------------------------------------------------
- * For more info, please see:
- * https://ionicframework.com/docs/theming/dark-mode
- */
+/* Keep the product light and consistent regardless of the device preference. */
 
-/* @import "@ionic/angular/css/palettes/dark.always.css"; */
-/* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import '@ionic/angular/css/palettes/dark.system.css';
+html,
+body {
+  background: var(--ion-background-color);
+  color: var(--ion-text-color);
+}
+
+body {
+  margin: 0;
+  font-family: var(--ion-font-family);
+  -webkit-font-smoothing: antialiased;
+}
+
+ion-toolbar {
+  --background: var(--ion-toolbar-background);
+  --border-color: var(--ion-border-color);
+  --color: var(--ion-text-color);
+  border-bottom: 1px solid var(--ion-border-color);
+}
+
+ion-card {
+  margin: 16px 0;
+  border: 1px solid var(--ion-border-color);
+  border-radius: 18px;
+  box-shadow: 0 8px 24px rgba(23, 48, 66, 0.06);
+  background: var(--ion-card-background);
+}
+
+ion-card-title {
+  color: var(--ion-color-dark);
+  font-weight: 700;
+}
+
+ion-item {
+  --background: var(--ion-item-background);
+  --border-color: var(--ion-border-color);
+}
+
+ion-button {
+  --border-radius: 12px;
+  font-weight: 650;
+  text-transform: none;
+}
+
+.station-map-marker {
+  background: transparent;
+  border: 0;
+
+  span {
+    display: grid;
+    width: 38px;
+    height: 38px;
+    place-items: center;
+    border: 3px solid #ffffff;
+    border-radius: 50% 50% 50% 0;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 800;
+    transform: rotate(-45deg);
+    box-shadow: 0 3px 10px rgba(23, 48, 66, 0.24);
+  }
+
+  span::first-line { transform: rotate(45deg); }
+}
 
 /* ============================================================
    Shared layout & state utilities (used across pages)
    ============================================================ */
 .page-container {
-  max-width: 640px;
+  max-width: 760px;
   margin: 0 auto;
+  padding: 8px 16px 32px;
 }
 
 .loading-container {

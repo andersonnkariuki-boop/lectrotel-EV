@@ -1,7 +1,7 @@
 import { Injectable, inject } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
-import { BehaviorSubject, Observable, tap } from "rxjs";
+import { BehaviorSubject, Observable, map, tap } from "rxjs";
 import { User, UserRole, AuthResponse } from "../models/user.model";
 import { environment } from "../../environments/environment";
 
@@ -36,13 +36,22 @@ export class AuthService {
   }
 
   login(email: string, password: string): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.url}auth/login`, { email, password }).pipe(
+    return this.http.post<any>(`${this.url}login`, {
+      email,
+      user_password: password
+    }).pipe(
       tap((response) => {
+        const user = this.normalizeUser(response);
         localStorage.setItem('authToken', response.token);
-        localStorage.setItem('currentUser', JSON.stringify(response.user));
-        this.userSubject.next(response.user);
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        this.userSubject.next(user);
         this.tokenSubject.next(response.token);
-      })
+      }),
+      map((response) => ({
+        token: response.token,
+        user: this.normalizeUser(response),
+        message: response.message
+      }))
     );
   }
 
@@ -57,6 +66,24 @@ export class AuthService {
     );
   }
 
+  createAccount(name: string, email: string, password: string, phone?: string): Observable<{ last_insert_id: number }> {
+    const [firstName, ...lastNameParts] = name.trim().split(/\s+/);
+    return this.http.post<{ last_insert_id: number }>(
+      `${this.url}register`,
+      {
+        user_name: email,
+        first_name: firstName,
+        last_name: lastNameParts.join(' ') || firstName,
+        email,
+        user_password: password,
+        role_id: 'Client',
+        phone_number: phone || '',
+        user_creator: this.getUserId() || 0
+      },
+      this.jwtHeader()
+    );
+  }
+
   logout(): void {
     localStorage.removeItem('currentUser');
     localStorage.removeItem('authToken');
@@ -66,7 +93,7 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-    return !!this.userSubject.getValue();
+    return !!this.getToken() && !!this.userSubject.getValue();
   }
 
   get userRole(): UserRole | null {
@@ -92,5 +119,27 @@ export class AuthService {
 
   getUserId(): number | null {
     return this.userSubject.getValue()?.user_id ?? null;
+  }
+
+  private normalizeUser(response: any): User {
+    const source = response?.user ?? response;
+    const role = String(source?.role ?? source?.role_id ?? '').toLowerCase();
+    const normalizedRole: UserRole = role === 'super_admin' || role === 'super_admin'
+      ? 'super_admin'
+      : role === 'charging_pillar_owner' || role === 'owner'
+        ? 'owner'
+        : role === 'admin'
+          ? 'admin'
+          : 'client';
+    const firstName = source?.first_name ?? '';
+    const lastName = source?.last_name ?? '';
+    return {
+      user_id: Number(source?.user_id ?? source?.id ?? 0),
+      name: source?.name ?? (`${firstName} ${lastName}`.trim() || source?.user_name || source?.email || 'User'),
+      email: source?.email ?? '',
+      role: normalizedRole,
+      phone: source?.phone_number ?? source?.phone,
+      user_amount: Number(source?.user_amount ?? 0)
+    };
   }
 }

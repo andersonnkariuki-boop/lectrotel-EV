@@ -48,7 +48,4 @@ export class LoginPage {
     }
   }
 
-  navigateToRegister() {
-    this.navCtrl.navigateForward('/auth/register');
-  }
 }

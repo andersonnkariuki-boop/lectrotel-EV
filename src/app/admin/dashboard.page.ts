@@ -5,6 +5,7 @@ import { SessionService } from "../services/session.service";
 import { PillarService } from "../services/pillar.service";
 import { StationService } from "../services/station.service";
 import { ClientService } from "../services/client.service";
+import { AuthService } from "../services/auth.service";
 
 @Component({
   selector: "app-dashboard",
@@ -24,6 +25,7 @@ export class AdminDashboardPage implements OnInit {
   private pillarService = inject(PillarService);
   private stationService = inject(StationService);
   private clientService = inject(ClientService);
+  private auth = inject(AuthService);
 
   ngOnInit() {
     this.loadStats();
@@ -48,5 +50,9 @@ export class AdminDashboardPage implements OnInit {
     });
     // Stats are best-effort; hide the spinner once the fastest request settles.
     setTimeout(() => { this.loading = false; }, 2500);
+  }
+
+  logout() {
+    this.auth.logout();
   }
 }

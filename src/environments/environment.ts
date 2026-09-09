@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'https://api.lectrotel.co.ke/api/', // Replace with your actual API URL
+  apiUrl: 'https://test.lectrotel.com/api/v1.0/',
   // QR Code format configuration
   qrConfig: {
     format: 'pillar_id:{id}|model:{model}|station:{station}|owner:{owner}',

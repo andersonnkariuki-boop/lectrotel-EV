@@ -1,5 +1,5 @@
 import { inject, Injectable } from "@angular/core";
-import { CanActivate, Router } from "@angular/router";
+import { CanActivate, Router, UrlTree } from "@angular/router";
 import { AuthService } from "../services/auth.service";
 import { UserRole } from "../models/user.model";
 
@@ -9,18 +9,16 @@ const ADMIN_ROLES: UserRole[] = ["admin", "super_admin", "owner"];
 
 @Injectable({ providedIn: "root" })
 export class AdminGuard implements CanActivate {
-  canActivate(): boolean {
-    const auth = inject(AuthService);
-    const router = inject(Router);
+  private readonly auth = inject(AuthService);
+  private readonly router = inject(Router);
 
-    if (!auth.isAuthenticated()) {
-      router.navigate(["/auth/login"]);
-      return false;
+  canActivate(): boolean | UrlTree {
+    if (!this.auth.isAuthenticated()) {
+      return this.router.createUrlTree(["/auth/login"]);
     }
 
-    if (!ADMIN_ROLES.includes(auth.userRole as UserRole)) {
-      router.navigate(["/client/dashboard"]);
-      return false;
+    if (!ADMIN_ROLES.includes(this.auth.userRole as UserRole)) {
+      return this.router.createUrlTree(["/client/dashboard"]);
     }
     return true;
   }

@@ -21,7 +21,7 @@ export class PillarService {
 
   getPillarById(id: number) {
     return this.http.get<any>(
-      `${this.url}chargingpillars/${id}`,
+      `${this.url}chargingPillar/${id}`,
       this.auth.jwtHeader()
     );
   }

@@ -1,6 +1,11 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>Admin Dashboard</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="clear" aria-label="Log out" (click)="logout()">
+        <ion-icon name="log-out-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -70,6 +75,10 @@
         <ion-button expand="block" fill="outline" routerLink="/admin/stations">Manage Stations</ion-button>
         <ion-button expand="block" fill="outline" routerLink="/admin/sessions">View Sessions</ion-button>
         <ion-button expand="block" fill="outline" routerLink="/admin/clients">Manage Clients</ion-button>
+        <ion-button expand="block" fill="outline" color="secondary" routerLink="/auth/register">
+          <ion-icon name="person-add-outline" slot="start"></ion-icon>
+          Create Account
+        </ion-button>
         <ion-button expand="block" fill="outline" routerLink="/admin/reports">Reports</ion-button>
         <ion-button expand="block" fill="outline" routerLink="/admin/wallet">Wallet Overview</ion-button>
       </ion-card-content>

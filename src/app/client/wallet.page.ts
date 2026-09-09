@@ -35,8 +35,7 @@ export class ClientWalletPage implements OnInit {
   loadWallet() {
     this.walletService.getWallet().subscribe({
       next: (response: any) => {
-        // Handle both direct ({ user_amount }) and wrapped responses.
-        this.balance = Number(response?.user_amount ?? response?.balance ?? this.balance);
+        this.balance = this.extractBalance(response);
         this.loading = false;
       },
       error: (error: any) => {
@@ -46,11 +45,19 @@ export class ClientWalletPage implements OnInit {
     });
   }
 
+  private extractBalance(response: any): number {
+    const wallet = response?.data ?? response?.wallet ?? response;
+    const value = wallet?.user_amount ?? wallet?.balance ?? wallet?.amount;
+    const balance = Number(value);
+    return Number.isFinite(balance) ? balance : 0;
+  }
+
   loadTransactions() {
     this.loadingTransactions = true;
     this.walletService.getTransactions().subscribe({
       next: (response: any) => {
-        this.transactions = response?.items || response || [];
+        const payload = response?.data ?? response;
+        this.transactions = payload?.items ?? payload?.transactions ?? payload ?? [];
         this.loadingTransactions = false;
       },
       error: (error: any) => {

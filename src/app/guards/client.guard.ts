@@ -1,21 +1,19 @@
 import { inject, Injectable } from "@angular/core";
-import { CanActivate, Router } from "@angular/router";
+import { CanActivate, Router, UrlTree } from "@angular/router";
 import { AuthService } from "../services/auth.service";
 
 @Injectable({ providedIn: "root" })
 export class ClientGuard implements CanActivate {
-  canActivate(): boolean {
-    const auth = inject(AuthService);
-    const router = inject(Router);
+  private readonly auth = inject(AuthService);
+  private readonly router = inject(Router);
 
-    if (!auth.isAuthenticated()) {
-      router.navigate(["/auth/login"]);
-      return false;
+  canActivate(): boolean | UrlTree {
+    if (!this.auth.isAuthenticated()) {
+      return this.router.createUrlTree(["/auth/login"]);
     }
 
-    if (auth.userRole !== "client") {
-      router.navigate(["/admin/dashboard"]);
-      return false;
+    if (this.auth.userRole !== "client") {
+      return this.router.createUrlTree(["/admin/dashboard"]);
     }
     return true;
   }
