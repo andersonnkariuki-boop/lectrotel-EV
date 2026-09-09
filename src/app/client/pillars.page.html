@@ -2,6 +2,9 @@
   <ion-toolbar>
     <ion-title>Charging Pillars</ion-title>
     <ion-buttons slot="end">
+      <ion-button routerLink="/client/stations" aria-label="Open station map">
+        <ion-icon name="map-outline" slot="icon-only"></ion-icon>
+      </ion-button>
       <ion-button (click)="openQRScan()" class="qr-button">
         <ion-icon name="qr-code-outline" slot="icon-only"></ion-icon>
       </ion-button>
@@ -89,9 +92,16 @@
               <ion-icon name="flash-outline"></ion-icon>
               {{ pillar.energy_reading || 0 }} kWh
             </p>
+            <p class="pillar-location">
+              <ion-icon name="location-outline"></ion-icon>
+              {{ getPillarLocationLabel(pillar) }}
+            </p>
           </ion-label>
 
           <ion-buttons slot="end">
+            <ion-button fill="clear" color="primary" aria-label="Open pillar location" (click)="openPillarLocation(pillar)">
+              <ion-icon name="navigate-outline" slot="icon-only"></ion-icon>
+            </ion-button>
             @if (getStatusClass(pillar) === 'available') {
               <ion-button fill="solid" color="success" (click)="openQRScan()">
                 <ion-icon name="flash-outline"></ion-icon>

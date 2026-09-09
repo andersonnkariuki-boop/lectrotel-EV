@@ -78,6 +78,30 @@ export class ClientPillarsPage implements OnInit {
     this.navCtrl.navigateForward('/scan');
   }
 
+  openPillarLocation(pillar: any) {
+    const query = this.hasCoordinates(pillar)
+      ? `${pillar.latitude},${pillar.longitude}`
+      : [pillar.model, pillar.station_name, pillar.location, `Pillar ${pillar.charging_pillar_id}`]
+        .filter(Boolean)
+        .join(' ');
+    window.open(
+      `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`,
+      '_blank',
+      'noopener,noreferrer'
+    );
+  }
+
+  hasCoordinates(pillar: any): boolean {
+    return Number.isFinite(Number(pillar.latitude)) && Number.isFinite(Number(pillar.longitude));
+  }
+
+  getPillarLocationLabel(pillar: any): string {
+    if (this.hasCoordinates(pillar)) {
+      return `${Number(pillar.latitude).toFixed(5)}, ${Number(pillar.longitude).toFixed(5)}`;
+    }
+    return pillar.station_name || pillar.location || 'Location available in Google Maps';
+  }
+
   getStatusClass(pillar: any): string {
     if (pillar.is_deactivated) return 'offline';
     if (pillar.is_charging) return 'active';

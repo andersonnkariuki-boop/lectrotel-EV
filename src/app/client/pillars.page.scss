@@ -189,6 +189,20 @@
         align-items: center;
         gap: 4px;
       }
+
+      .pillar-location {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        max-width: 210px;
+        overflow: hidden;
+        color: #087f89;
+        font-size: 11px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
+        ion-icon { font-size: 14px; }
+      }
     }
   }
 }
