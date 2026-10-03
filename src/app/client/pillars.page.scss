@@ -62,9 +62,27 @@
   padding: 0 16px;
 
   .search-bar {
-    --border-radius: 12px;
-    --background: #f1f5f9;
+    border-radius: 12px;
+    background: #f1f5f9;
     margin-bottom: 12px;
+    padding: 12px 14px;
+    border: 1px solid var(--ion-border-color);
+    width: 100%;
+    font-size: 14px;
+    font-family: var(--ion-font-family, inherit);
+    color: var(--ion-color-dark);
+    box-sizing: border-box;
+    outline: none;
+
+    &:focus {
+      border-color: #35b9bd !important;
+      box-shadow: 0 0 0 3px rgba(53, 185, 189, 0.14) !important;
+    }
+
+    &::placeholder {
+      color: #9fb1bc !important;
+      opacity: 1 !important;
+    }
   }
 
   ion-segment {

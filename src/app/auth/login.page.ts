@@ -2,6 +2,7 @@ import { Component, inject } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { IonicModule, NavController } from "@ionic/angular";
+import { firstValueFrom } from "rxjs";
 import { AuthService } from "../services/auth.service";
 
 @Component({
@@ -26,7 +27,7 @@ export class LoginPage {
     this.showError = false;
     
     try {
-      await this.auth.login(this.email, this.password).toPromise();
+      await firstValueFrom(this.auth.login(this.email, this.password));
       const user = this.auth.currentUser;
       this.redirectByRole(user?.role);
     } catch (error: any) {

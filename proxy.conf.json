@@ -1,0 +1,10 @@
+{
+  "/api/v1.0": {
+    "target": "https://test.lectrotel.com",
+    "secure": true,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/api/v1.0": ""
+    }
+  }
+}

@@ -35,21 +35,21 @@
       <ion-card-content>
         <ion-item>
           <ion-label position="floating">Amount (KES)</ion-label>
-          <ion-input
+          <input
             type="number"
             placeholder="e.g. 500"
             [(ngModel)]="topUpAmount"
             name="topUpAmount"
-          ></ion-input>
+          />
         </ion-item>
         <ion-item>
           <ion-label position="floating">M-Pesa Phone Number</ion-label>
-          <ion-input
+          <input
             type="tel"
             placeholder="e.g. 0712 345 678"
             [(ngModel)]="phoneNumber"
             name="phoneNumber"
-          ></ion-input>
+          />
         </ion-item>
         <p class="topup-note">
           You will receive an M-Pesa STK push prompt to complete the payment.

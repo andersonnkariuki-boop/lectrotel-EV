@@ -40,7 +40,7 @@
   h1 {
     margin: 8px 0 6px;
     color: var(--ion-color-dark);
-    font-size: clamp(28px, 5vw, 38px);
+    font-size: 32px;
     letter-spacing: -0.04em;
   }
 
@@ -66,10 +66,11 @@
 }
 
 .section-icon {
-  display: grid;
+  display: flex;
   width: 40px;
   height: 40px;
-  place-items: center;
+  align-items: center;
+  justify-content: center;
   border-radius: 12px;
   background: #d6f3ed;
   color: #087f89;

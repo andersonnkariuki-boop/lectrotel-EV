@@ -1,0 +1,32 @@
+<ion-page class="signin-page">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Sign In</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content fullscreen>
+    <div class="signin-container">
+      <h2>Sign In</h2>
+      <form [formGroup]="signInForm" (ngSubmit)="onSubmit()">
+        <ion-item>
+          <ion-label position="stacked">Email</ion-label>
+          <ion-input type="email" formControlName="email" placeholder="Enter your email"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="stacked">Password</ion-label>
+          <ion-input type="password" formControlName="password" placeholder="Enter your password"></ion-input>
+        </ion-item>
+
+        @if (signInForm.errors?.['required'] && signInForm.touched) {
+          <div class="signin-error">Please fill in all required fields.</div>
+        }
+
+        <ion-button type="submit" expand="block" color="primary" [disabled]="signInForm.invalid">
+          Sign In
+        </ion-button>
+      </form>
+    </div>
+  </ion-content>
+</ion-page>

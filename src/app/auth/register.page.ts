@@ -2,6 +2,7 @@ import { Component, inject } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { IonicModule, NavController } from "@ionic/angular";
+import { firstValueFrom } from "rxjs";
 import { AuthService } from "../services/auth.service";
 
 @Component({
@@ -47,12 +48,12 @@ export class RegisterPage {
 
     this.loading = true;
     try {
-      await this.auth.createAccount(
+      await firstValueFrom(this.auth.createAccount(
         this.name.trim(),
         this.email.trim(),
         this.password,
         this.phone.trim()
-      ).toPromise();
+      ));
       this.navCtrl.navigateRoot('/admin/clients');
     } catch (error: any) {
       this.showError = true;

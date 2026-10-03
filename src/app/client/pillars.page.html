@@ -31,13 +31,13 @@
 
   <!-- Filters -->
   <div class="filters-container">
-    <ion-searchbar 
-      [(ngModel)]="searchTerm" 
-      (ionInput)="onSearch()"
+    <input
+      type="text"
+      [(ngModel)]="searchTerm"
+      (input)="onSearch()"
       placeholder="Search pillars..."
-      animated
       class="search-bar"
-    ></ion-searchbar>
+    />
     
     <ion-segment [(ngModel)]="selectedFilter" (ionChange)="onFilterChange()">
       <ion-segment-button value="all">
